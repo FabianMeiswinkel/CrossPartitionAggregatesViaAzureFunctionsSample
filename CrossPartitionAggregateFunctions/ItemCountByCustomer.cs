@@ -18,8 +18,6 @@ namespace CrossPartitionAggregateFunctions
 {
     public static class ItemCountByCustomer
     {
-        private const string ConnectionStringName = "CosmosDB";
-
         private static readonly object staticLock = new object();
         private static readonly Uri collectionUri = UriFactory.CreateDocumentCollectionUri("TestDB", "Items");
 
@@ -137,12 +135,12 @@ namespace CrossPartitionAggregateFunctions
                     .AddEnvironmentVariables()
                     .Build();
 
-                string connectionStringValue = config.GetConnectionString(ConnectionStringName);
+                string connectionStringValue = config.GetConnectionString(CosmosDBConnectionString.KeyName);
 
                 if (String.IsNullOrWhiteSpace(connectionStringValue))
                 {
                     throw new InvalidOperationException(
-                        Invariant($"Connection string '{ConnectionStringName}' has not been defined."));
+                        Invariant($"Connection string '{CosmosDBConnectionString.KeyName}' has not been defined."));
                 }
 
                 var connectionString = CosmosDBConnectionString.Parse(connectionStringValue);
@@ -150,11 +148,7 @@ namespace CrossPartitionAggregateFunctions
                 cosmosDbClient = new DocumentClient(
                     connectionString.Endpoint,
                     connectionString.AuthKey,
-                    new ConnectionPolicy
-                    {
-                        ConnectionMode = ConnectionMode.Gateway,
-                        ConnectionProtocol = Protocol.Https
-                    });
+                    CosmosDBConnectionString.DefaultPolicy);
             }
         }
 

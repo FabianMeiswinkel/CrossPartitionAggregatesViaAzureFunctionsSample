@@ -1,15 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.Azure.Documents.Client;
 
 namespace CrossPartitionAggregateFunctions
 {
     public class CosmosDBConnectionString
     {
+        public const string KeyName = "CosmosDB";
+
         private const string AccountEndpointKey = "AccountEndpoint";
         private const string AccountKeyKey = "AccountKey";
         private static readonly HashSet<string> RequireSettings =
             new HashSet<string>(new[] { AccountEndpointKey, AccountKeyKey }, StringComparer.OrdinalIgnoreCase);
+
+        private static readonly ConnectionPolicy defaultPolicy = new ConnectionPolicy
+        {
+            ConnectionMode = ConnectionMode.Direct,
+            ConnectionProtocol = Protocol.Https
+        };
 
         public CosmosDBConnectionString(Uri endpoint, string authKey)
         {
@@ -25,6 +34,14 @@ namespace CrossPartitionAggregateFunctions
 
             this.Endpoint = endpoint;
             this.AuthKey = authKey;
+        }
+
+        public static ConnectionPolicy DefaultPolicy
+        {
+            get
+            {
+                return defaultPolicy;
+            }
         }
 
         public string AuthKey { get; set; }

@@ -1,0 +1,8 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+  },
+  "ConnectionStrings": {
+    "CosmosDB": "YOUR_CONNECTION_STRING"
+  }
+}

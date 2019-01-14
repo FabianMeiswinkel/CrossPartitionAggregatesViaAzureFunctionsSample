@@ -137,11 +137,7 @@ namespace CrossPartitionAggregateFunctions
                 cosmosDbClient = new DocumentClient(
                     connectionString.Endpoint,
                     connectionString.AuthKey,
-                    new ConnectionPolicy
-                    {
-                        ConnectionMode = ConnectionMode.Gateway,
-                        ConnectionProtocol = Protocol.Https
-                    });
+                    CosmosDBConnectionString.DefaultPolicy);
             }
         }
 
